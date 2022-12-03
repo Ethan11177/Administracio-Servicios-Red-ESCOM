@@ -15,24 +15,24 @@ public class Servidor {
                 Socket cl = s.accept();
                 System.out.println("conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());
 
-                DataInputStream dis = new DataInputStream(cl.getInputStream());
+                DataInputStream entrada = new DataInputStream(cl.getInputStream());
                 
                 byte[] b = new byte[1024];
-                String nombre = dis.readUTF();
+                String nombre = entrada.readUTF();
 
                 System.out.println("Recibimos el archivo:" + nombre);
-                long tam = dis.readLong();
+                long tam = entrada.readLong();
 
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(nombre));
+                DataOutputStream salida  = new DataOutputStream(new FileOutputStream(nombre));
 
                 long recibidos = 0;
                 int n = 0 , porcentaje;
 
                 while (recibidos < tam) {
                     
-                    n = dis.read(b);
-                    dos.write(b, 0, n);
-                    dos.flush();
+                    n = entrada.read(b);
+                    salida.write(b, 0, n);
+                    salida.flush();
                     recibidos += n;
                     porcentaje = (int)(recibidos*100/tam);
                     System.out.println("Progreso: " + porcentaje + "%");
@@ -40,8 +40,8 @@ public class Servidor {
 
                 System.out.println("\n\nArchivo recibido");
 
-                dos.close();
-                dis.close();
+                salida.close();
+                entrada.close();
                 cl.close();
 
             }

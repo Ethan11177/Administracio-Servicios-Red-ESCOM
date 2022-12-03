@@ -34,20 +34,20 @@ public class Cliente {
                 File f[] = jf.getSelectedFiles();
 
                 for (File file : f) {
-                    
+
                     Socket cl = new Socket(host, pto);
 
                     String archivo = file.getAbsolutePath();
                     String nombre = file.getName();
                     long tam = file.length();
 
-                    DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
-                    DataInputStream dis = new DataInputStream(new FileInputStream(archivo));
+                    DataOutputStream salida = new DataOutputStream(cl.getOutputStream());
+                    DataInputStream entrada = new DataInputStream(new FileInputStream(archivo));
 
-                    dos.writeUTF(nombre);
-                    dos.flush();
-                    dos.writeLong(tam);
-                    dos.flush();
+                    salida.writeUTF(nombre);
+                    salida.flush();
+                    salida.writeLong(tam);
+                    salida.flush();
 
                     byte[] b = new byte[1024];
                     long enviados = 0;
@@ -55,16 +55,16 @@ public class Cliente {
 
                     while (enviados < tam) {
 
-                        n = dis.read(b);
-                        dos.write(b, 0, n);
-                        dos.flush();
+                        n = entrada.read(b);
+                        salida.write(b, 0, n);
+                        salida.flush();
                         enviados += n;
                         porcentaje = (int) (enviados * 100 / tam);
                         System.out.println("enviado: " + porcentaje + "%\r");
                     }
                     System.out.println("\n\nArchivo enviado");
-                    dos.close();
-                    dis.close();
+                    salida.close();
+                    entrada.close();
                     cl.close();
                 }
 
