@@ -26,6 +26,5 @@ public class Carrito {
     public void setPrecio_t(int precio_t) {
         this.precio_t = precio_t;
     }
-
     
 }
